@@ -2,7 +2,7 @@
 *
 * FILENAME : sorted_list.c
 *
-* DESCRIPTION : Implementation of a sorted linked list data structure.
+* DESCRIPTION : Sorted list implementation.
 * 
 * AUTHOR : Nick Shenderov
 *
@@ -13,7 +13,7 @@
 #include <assert.h> /* assert */
 #include <stdlib.h> /* malloc */
 
-#include "sorted_list.h" /* sorted linked list */
+#include "sorted_list.h"
 
 
 struct sorted_list

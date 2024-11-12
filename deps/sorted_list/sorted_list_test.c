@@ -1,67 +1,30 @@
 /*******************************************************************************
 *
-* FILENAME : sorted_list_test.c
+* FILENAME : sorted_list_test.h
 *
+* DESCRIPTION : Sorted list unit tests.
+* 
 * AUTHOR : Nick Shenderov
 *
 * DATE : 24.04.2023
 * 
 *******************************************************************************/
 
-#include <stdio.h>
-
-#include "sorted_list.h" /* sorted linked list */
-#include "testing.h" /* TH_ASSERT, TH_TEST_T, TH_TESTS_ARRAY_END, TH_RUN_TESTS*/
+#include "sorted_list.h"
+#include "testing.h"
 
 
-static int CompareInts1(const void* data1, const void *data2)
-{
-	if (*(int *) data1 < *(int *) data2)
-	{
-		return (-1);
-	}
-	else if (*(int *) data1 == *(int *) data2)
-	{
-		return (0);
-	}
+static int CompareInts(const void* data1, const void *data2);
+static int IsMatch(const void* data1, void *param);
+static int IsMatchAlwaysTrue(const void* data1, void *param);
+static int ActionAddInt(void *data, void *param);
 
-	return (1);
-}
-
-static int CompareInts2(const void* data1, void *param)
-{
-	if (*(int *) data1 > *(int *) param)
-	{
-		return (-1);
-	}
-	else if (*(int *) data1 == *(int *) param)
-	{
-		return (0);
-	}
-
-	return (1);
-}
-
-static int CompareInts3(const void* data1, void *param)
-{
-	return (0);
-	(void) data1;
-	(void) param;
-}
-
-static int ActionAddInt(void *data, void *param)
-{
-	*(int *) data += *(int *) param;
-	return (0);
-}
 
 static void TestSize(void);
 static void TestSizeEmpty(void);
 static void TestIsEmpty(void);
 static void TestInsert(void);
 static void TestInsertReturn(void);
-/*static void TestRemove(void);
-static void TestRemoveReturn(void);*/
 static void TestBegin(void);
 static void TestEnd(void);
 static void TestNext(void);
@@ -80,27 +43,25 @@ static void TestFindIf(void);
 int main()
 {
 	TH_TEST_T TESTS[] = {
-		{"Test SortedListBegin", TestBegin},
-		{"Test SortedListEnd", TestEnd},
-		{"Test SortedListNext", TestNext},
-		{"Test SortedListPrev", TestPrev},
-		{"Test SortedListGetData", TestGetData},
-		{"Test SortedListIsSameIterator", TestIsSameIterator},
-		{"Test size", TestSize},
-		{"Test size empty", TestSizeEmpty},
-		{"Test is_empty", TestIsEmpty},
-		{"Test insert general", TestInsert},
-		{"Test insert return value", TestInsertReturn},
-		/*{"Test remove general", TestRemove},
-		{"Test remove return value", TestRemoveReturn},*/
-		{"Test pop back", TestPopBack},
-		{"Test pop front", TestPopFront},
-		{"Test for each", TestForEach},
-		{"Test merge 1", TestMerge1},
-		{"Test merge 2", TestMerge2},
-		{"Test merge 3", TestMerge3},
-		{"Test find", TestFind},
-		{"Test find_if", TestFindIf},
+		{"SortedListBegin", TestBegin},
+		{"SortedListEnd", TestEnd},
+		{"SortedListNext", TestNext},
+		{"SortedListPrev", TestPrev},
+		{"SortedListGetData", TestGetData},
+		{"SortedListIsSameIterator", TestIsSameIterator},
+		{"size", TestSize},
+		{"size empty", TestSizeEmpty},
+		{"is_empty", TestIsEmpty},
+		{"insert general", TestInsert},
+		{"insert return value", TestInsertReturn},
+		{"pop back", TestPopBack},
+		{"pop front", TestPopFront},
+		{"for each", TestForEach},
+		{"merge 1", TestMerge1},
+		{"merge 2", TestMerge2},
+		{"merge 3", TestMerge3},
+		{"find", TestFind},
+		{"find_if", TestFindIf},
 		TH_TESTS_ARRAY_END
 	};
 
@@ -113,7 +74,7 @@ static void TestSize(void)
 {
 	int t = 3;
 
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
+	sorted_list_t *new_list = SortedListCreate(CompareInts);
 
 	SortedListInsert(new_list, &t);
 	TH_ASSERT(1 == SortedListSize(new_list));
@@ -126,7 +87,7 @@ static void TestSize(void)
 
 static void TestSizeEmpty(void)
 {
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
+	sorted_list_t *new_list = SortedListCreate(CompareInts);
 
 	TH_ASSERT(0 == SortedListSize(new_list));
 
@@ -137,7 +98,7 @@ static void TestIsEmpty(void)
 {
 	int t = 3;
 
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
+	sorted_list_t *new_list = SortedListCreate(CompareInts);
 
 	TH_ASSERT(1 == SortedListIsEmpty(new_list));
 
@@ -153,7 +114,7 @@ static void TestInsert(void)
 
 	sorted_list_iterator_t r = {0};
 
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
+	sorted_list_t *new_list = SortedListCreate(CompareInts);
 
 	SortedListInsert(new_list, &t1);
 	SortedListInsert(new_list, &t2);
@@ -206,7 +167,7 @@ static void TestInsertReturn(void)
 {
 	int t = 3;
 
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
+	sorted_list_t *new_list = SortedListCreate(CompareInts);
 
 	sorted_list_iterator_t r = SortedListInsert(new_list, &t);
 	TH_ASSERT(3 == *(int *) SortedListGetData(r));
@@ -214,58 +175,6 @@ static void TestInsertReturn(void)
 
 	SortedListDestroy(new_list);
 }
-
-/*static void TestRemove(void)
-{
-	int t1 = 1, t2 = 2, t3 = 3, t4 = 4, t5 = 5;
-
-	sorted_list_iterator_t r = {0};
-
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
-
-	SortedListInsert(new_list, &t1);
-	SortedListInsert(new_list, &t2);
-	SortedListInsert(new_list, &t3);
-	SortedListInsert(new_list, &t4);
-	SortedListInsert(new_list, &t5);
-
-	r = SortedListBegin(new_list);
-
-	r = SortedListRemove(r);
-	TH_ASSERT(2 == *(int *) SortedListGetData(r));
-
-	r = SortedListEnd(new_list);
-	r = SortedListPrev(r);
-	r = SortedListRemove(r);
-	TH_ASSERT(4 == *(int *) SortedListGetData(r));
-
-	r = SortedListEnd(new_list);
-	r = SortedListPrev(r);
-	r = SortedListRemove(r);
-	TH_ASSERT(3 == *(int *) SortedListGetData(r));
-
-	SortedListDestroy(new_list);
-}
-
-static void TestRemoveReturn(void)
-{
-	int t1 = 1;
-	int t2 = 2;
-
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
-
-	sorted_list_iterator_t r1 = SortedListInsert(new_list, &t1);
-	sorted_list_iterator_t r2 = SortedListInsert(new_list, &t2);
-
-	r1 = SortedListRemove(r1);
-	TH_ASSERT(2 == *(int *) SortedListGetData(r1));
-
-	r2 = SortedListRemove(r2);
-	TH_ASSERT(NULL == SortedListNext(r2).internal_iter);
-	TH_ASSERT(NULL == SortedListPrev(r2).internal_iter);
-
-	SortedListDestroy(new_list);
-}*/
 
 static void TestPopBack(void)
 {
@@ -275,7 +184,7 @@ static void TestPopBack(void)
 
 	int *data = NULL;
 
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
+	sorted_list_t *new_list = SortedListCreate(CompareInts);
 
 	SortedListInsert(new_list, &t1);
 	SortedListInsert(new_list, &t2);
@@ -309,7 +218,7 @@ static void TestPopFront(void)
 
 	int *data = NULL;
 
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
+	sorted_list_t *new_list = SortedListCreate(CompareInts);
 
 	SortedListInsert(new_list, &t1);
 	SortedListInsert(new_list, &t2);
@@ -334,12 +243,11 @@ static void TestPopFront(void)
 	SortedListDestroy(new_list);
 }
 
-
 static void TestBegin(void)
 {
 	int t1 = 1;
 
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
+	sorted_list_t *new_list = SortedListCreate(CompareInts);
 
 	sorted_list_iterator_t r = SortedListBegin(new_list);
 
@@ -358,7 +266,7 @@ static void TestEnd(void)
 	int t1 = 1;
 	int t2 = 2;
 
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
+	sorted_list_t *new_list = SortedListCreate(CompareInts);
 
 	sorted_list_iterator_t r = SortedListEnd(new_list);
 
@@ -378,7 +286,7 @@ static void TestNext(void)
 	int t1 = 1;
 	int t2= 2;
 
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
+	sorted_list_t *new_list = SortedListCreate(CompareInts);
 
 	sorted_list_iterator_t r = SortedListEnd(new_list);
 
@@ -400,7 +308,7 @@ static void TestPrev(void)
 	int t1 = 1;
 	int t2= 2;
 
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
+	sorted_list_t *new_list = SortedListCreate(CompareInts);
 
 	sorted_list_iterator_t r = SortedListBegin(new_list);
 
@@ -425,7 +333,7 @@ static void TestIsSameIterator(void)
 	int t1 = 1;
 	int t2 = 2;
 
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
+	sorted_list_t *new_list = SortedListCreate(CompareInts);
 
 	sorted_list_iterator_t r1 = SortedListInsert(new_list, &t1);
 	sorted_list_iterator_t r2 = SortedListInsert(new_list, &t2);
@@ -441,7 +349,7 @@ static void TestGetData(void)
 	int t1 = 1;
 	int t2= 2;
 
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
+	sorted_list_t *new_list = SortedListCreate(CompareInts);
 
 	sorted_list_iterator_t r1 = SortedListInsert(new_list, &t1);
 	sorted_list_iterator_t r2 = SortedListInsert(new_list, &t2);
@@ -458,7 +366,7 @@ static void TestForEach(void)
 
 	sorted_list_iterator_t r = {0};
 
-	sorted_list_t *new_list = SortedListCreate(CompareInts1);
+	sorted_list_t *new_list = SortedListCreate(CompareInts);
 
 	SortedListInsert(new_list, &t1);
 	SortedListInsert(new_list, &t2);
@@ -468,8 +376,7 @@ static void TestForEach(void)
 
 	r = SortedListBegin(new_list);
 
-	SortedListForEach(SortedListBegin(new_list), SortedListEnd(new_list),
-																		ActionAddInt, &t5);
+	SortedListForEach(SortedListBegin(new_list), SortedListEnd(new_list), ActionAddInt, &t5);
 
 	TH_ASSERT(6 == *(int *) SortedListGetData(r));
 
@@ -498,8 +405,8 @@ static void TestMerge1(void)
 	sorted_list_iterator_t r = {0};
 
 	sorted_list_t *returned_list = NULL;
-	sorted_list_t *list1 = SortedListCreate(CompareInts1);
-	sorted_list_t *list2 = SortedListCreate(CompareInts1);
+	sorted_list_t *list1 = SortedListCreate(CompareInts);
+	sorted_list_t *list2 = SortedListCreate(CompareInts);
 
 	for (; i < first_list_size; ++i)
 	{
@@ -542,8 +449,8 @@ static void TestMerge2(void)
 	sorted_list_iterator_t r = {0};
 
 	sorted_list_t *returned_list = NULL;
-	sorted_list_t *list1 = SortedListCreate(CompareInts1);
-	sorted_list_t *list2 = SortedListCreate(CompareInts1);
+	sorted_list_t *list1 = SortedListCreate(CompareInts);
+	sorted_list_t *list2 = SortedListCreate(CompareInts);
 
 	for (; i < first_list_size; ++i)
 	{
@@ -585,8 +492,8 @@ static void TestMerge3(void)
 	sorted_list_iterator_t r = {0};
 
 	sorted_list_t *returned_list = NULL;
-	sorted_list_t *list1 = SortedListCreate(CompareInts1);
-	sorted_list_t *list2 = SortedListCreate(CompareInts1);
+	sorted_list_t *list1 = SortedListCreate(CompareInts);
+	sorted_list_t *list2 = SortedListCreate(CompareInts);
 
 	for (; i < first_list_size; ++i)
 	{
@@ -619,7 +526,7 @@ static void TestFind(void)
 
 	sorted_list_iterator_t r = {0};
 
-	sorted_list_t *list = SortedListCreate(CompareInts1);
+	sorted_list_t *list = SortedListCreate(CompareInts);
 
 	SortedListInsert(list, &t1);
 	SortedListInsert(list, &t2);
@@ -649,7 +556,7 @@ static void TestFindIf(void)
 
 	sorted_list_iterator_t r = {0};
 
-	sorted_list_t *list = SortedListCreate(CompareInts1);
+	sorted_list_t *list = SortedListCreate(CompareInts);
 
 	SortedListInsert(list, &t1);
 	SortedListInsert(list, &t2);
@@ -657,27 +564,63 @@ static void TestFindIf(void)
 	SortedListInsert(list, &t4);
 	SortedListInsert(list, &t5);
 
-	r = SortedListFindIf(SortedListBegin(list), SortedListEnd(list),
-																CompareInts2, &t5);
+	r = SortedListFindIf(SortedListBegin(list), SortedListEnd(list), IsMatch, &t5);
 	TH_ASSERT(1 == *(int *) SortedListGetData(r));
 
-	r = SortedListFindIf(SortedListBegin(list), SortedListEnd(list),
-																CompareInts2, &t0);
+	r = SortedListFindIf(SortedListBegin(list), SortedListEnd(list), IsMatch, &t0);
 	TH_ASSERT(1 == *(int *) SortedListGetData(r));
 
-	r = SortedListFindIf(SortedListBegin(list), SortedListEnd(list),
-																CompareInts2, &t6);
+	r = SortedListFindIf(SortedListBegin(list), SortedListEnd(list), IsMatch, &t6);
 	TH_ASSERT(1 == *(int *) SortedListGetData(r));
 
-	r = SortedListFindIf(SortedListBegin(list), SortedListEnd(list),
-																CompareInts2, &t6);
+	r = SortedListFindIf(SortedListBegin(list), SortedListEnd(list), IsMatch, &t6);
 	r = SortedListPrev(r);
 	r = SortedListPrev(r);
 	TH_ASSERT(NULL == r.internal_iter);
 
-	r = SortedListFindIf(SortedListBegin(list), SortedListEnd(list),
-																CompareInts3, &t6);
+	r = SortedListFindIf(SortedListBegin(list), SortedListEnd(list), IsMatchAlwaysTrue, &t6);
 	TH_ASSERT(1 == SortedListIsSameIterator(r, SortedListEnd(list)));
 
 	SortedListDestroy(list);
+}
+
+static int CompareInts(const void* data1, const void *data2)
+{
+	if (*(int *) data1 < *(int *) data2)
+	{
+		return (-1);
+	}
+	else if (*(int *) data1 == *(int *) data2)
+	{
+		return (0);
+	}
+
+	return (1);
+}
+
+static int IsMatch(const void* data1, void *param)
+{
+	if (*(int *) data1 > *(int *) param)
+	{
+		return (-1);
+	}
+	else if (*(int *) data1 == *(int *) param)
+	{
+		return (0);
+	}
+
+	return (1);
+}
+
+static int IsMatchAlwaysTrue(const void* data1, void *param)
+{
+	return (0);
+	(void) data1;
+	(void) param;
+}
+
+static int ActionAddInt(void *data, void *param)
+{
+	*(int *) data += *(int *) param;
+	return (0);
 }

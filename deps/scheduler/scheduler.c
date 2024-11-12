@@ -2,7 +2,7 @@
 *
 * FILENAME : scheduler.c
 *
-* DESCRIPTION : Implementation of a scheduler data structure.
+* DESCRIPTION : Scheduler implementation.
 * 
 * AUTHOR : Nick Shenderov
 *

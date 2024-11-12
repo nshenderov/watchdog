@@ -2,6 +2,8 @@
 *
 * FILENAME : scheduler_test.c
 *
+* DESCRIPTION : Scheduler unit tests.
+* 
 * AUTHOR : Nick Shenderov
 *
 * DATE : 09.05.2023
@@ -12,8 +14,8 @@
 #include <stdio.h> /* printf */
 #include <string.h> /* strstr, fclose, fopen, fread, feof */
 
-#include "scheduler.h" /* scheduler */
-#include "testing.h" /* TH_ASSERT, TH_TEST_T, TH_TESTS_ARRAY_END, TH_RUN_TESTS*/
+#include "scheduler.h"
+#include "testing.h"
 
 
 enum {COMPLETE, RESCHEDULE, FAILED};
@@ -39,6 +41,7 @@ static int ExitByValue(void *operation_params);
 static int IncrementValue(void *val);
 static void Cleanup(void *cleanup_params);
 
+
 static void TestSchedulerCreate(void);
 static void TestSchedulerAddTask(void);
 static void TestSchedulerRemoveTask(void);
@@ -48,7 +51,6 @@ static void TestSchedulerClear(void);
 static void TestSchedulerRun(void);
 static void TestSchedulerStop(void);
 static void TestSchedulerExitByFile(void);
-
 
 int main()
 {

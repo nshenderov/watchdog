@@ -2,16 +2,16 @@
 *
 * FILENAME : uid_test.c
 *
+* DESCRIPTION : UID unit tests.
+*
 * AUTHOR : Nick Shenderov
 *
 * DATE : 4.05.2023
 * 
 *******************************************************************************/
 
-#include <stdio.h>
-
-#include "uid.h" /* uid */
-#include "testing.h" /* TH_ASSERT, TH_TEST_T, TH_TESTS_ARRAY_END, TH_RUN_TESTS*/
+#include "uid.h"
+#include "testing.h"
 
 
 static void TestUID(void);
@@ -19,7 +19,7 @@ static void TestUID(void);
 int main()
 {
 	TH_TEST_T TESTS[] = {
-   	{"Test UID", TestUID},
+   	{"UID", TestUID},
 		TH_TESTS_ARRAY_END
 	};
 

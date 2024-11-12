@@ -65,7 +65,7 @@ do 																				\
 	while(NULL != RUNNER->TH_TEST_FUNC && NULL != RUNNER->TH_INFO_MESSAGE)		\
 	{																			\
 		TH_G_IS_CURR_TEST_PASSED = 1;											\
-		printf("TEST: "TH_YELLOW"%s\n"TH_NC, RUNNER->TH_INFO_MESSAGE);			\
+		printf("\nTEST: "TH_YELLOW"%s\n"TH_NC, RUNNER->TH_INFO_MESSAGE);			\
 		RUNNER->TH_TEST_FUNC();													\
 		++RUNNER;																\
 		if (TH_G_IS_CURR_TEST_PASSED)											\

@@ -1,8 +1,8 @@
 /*******************************************************************************
 *
-*  FILENAME : uid.c
+* FILENAME : uid.c
 *
-* DESCRIPTION : Implementation of a UID data structure.
+* DESCRIPTION : UID implementation.
 * 
 * AUTHOR : Nick Shenderov
 *
@@ -15,6 +15,7 @@
 #include <ifaddrs.h> /* getifaddrs */
 #include <string.h> /* memcpy, memcmp */
 #include <pthread.h> /* mutexes */
+
 #include "uid.h"
 
 enum {SUCCESS, FAILURE};

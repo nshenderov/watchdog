@@ -2,41 +2,20 @@
 *
 * FILENAME : pqueue_test.c
 *
+* DESCRIPTION : Pqueue unit tests.
+* 
 * AUTHOR : Nick Shenderov
 *
 * DATE : 07.05.2023
 * 
 *******************************************************************************/
 
-#include <stdio.h>
-
-#include "pqueue.h" /* pqueue */
-#include "testing.h" /* TH_ASSERT, TH_TEST_T, TH_TESTS_ARRAY_END, TH_RUN_TESTS*/
+#include "pqueue.h"
+#include "testing.h"
 
 
-static int CompareInts(const void* data1, const void *data2)
-{
-	if (*(int *) data1 < *(int *) data2)
-	{
-		return (-1);
-	}
-	else if (*(int *) data1 == *(int *) data2)
-	{
-		return (0);
-	}
-
-	return (1);
-}
-
-static int RemoveInt(const void *data, void *param)
-{
-	if (*(int *) data == *(int *) param)
-	{
-		return (1);
-	}
-
-	return (0);
-}
+static int CompareInts(const void* data1, const void *data2);
+static int RemoveInt(const void *data, void *param);
 
 
 static void TestPqueue(void);
@@ -103,4 +82,28 @@ static void TestPqueue(void)
 	TH_ASSERT(1 == PQIsEmpty(pqueue));
 	
 	PQDestroy(pqueue);
+}
+
+static int CompareInts(const void* data1, const void *data2)
+{
+	if (*(int *) data1 < *(int *) data2)
+	{
+		return (-1);
+	}
+	else if (*(int *) data1 == *(int *) data2)
+	{
+		return (0);
+	}
+
+	return (1);
+}
+
+static int RemoveInt(const void *data, void *param)
+{
+	if (*(int *) data == *(int *) param)
+	{
+		return (1);
+	}
+
+	return (0);
 }

@@ -1,8 +1,10 @@
 /*******************************************************************************
 *
-*  FILENAME : uid.h
+* FILENAME : uid.h
 *
-* DESCRIPTION : Interface of a UID data structure.
+* DESCRIPTION : UID stands for "Unique Identifier". It is a unique code assigned
+* to an entity or object, such as a user, process, or file, to distinguish it
+* from other similar entities or objects.
 * 
 * AUTHOR : Nick Shenderov
 *
@@ -16,33 +18,23 @@
 #include <sys/types.h> /* pid_t */ 
 #include <time.h> /* time_t */
 
-/*******************************************************************************
-*   Specifies the size of ip field in UID structure.
-*   Don't change it directly.
-*******************************************************************************/
 #define IP_SA_DATA_LENGTH (14)
 
 typedef struct UID nsrd_uid_t;
 
-/*******************************************************************************
-*   Structure returned by create function in case of failure.
-*   Use UIDIsSame() and this value to check for failures.
-*******************************************************************************/
+/*
+DESCRIPTION
+	Constant for an element representing non-existent UID. Use it to check
+	for functions failures.
+*/
 extern const nsrd_uid_t BadUID;
 
-/*******************************************************************************
-*   DESCRIPTION:
-*       The UID structure.
-*   FIELDS:
-*       counter: UID's number.
-*       timestamp: timestamp at the moment of creation of UID.
-*       pid: callers PID.
-*       ip: callers ip address.
-*   NOTE:
-*       Never access the fields of the uid directly. 
-*       The names, types, and number of fields can change in future versions.
-*       Only use the provided functions.
-*******************************************************************************/
+/*
+DESCRIPTION
+	The declaration of struct UID, only for definition of UID vars.
+    User should never access the fields of the UID directly and should
+    use only the provided functions.
+*/
 struct UID
 {
     size_t counter;
@@ -51,33 +43,32 @@ struct UID
     char ip[IP_SA_DATA_LENGTH];
 };
 
-/*******************************************************************************
-*   DESCRIPTION:
-*       Creates a UID structure.
-*       Creation may fail, in this case function returns BadUID. 
-*       Use UIDIsSame() and BadUID value to check for failures.
-*   RETURN:
-*       Returns new UID on success.
-*       Returns BadUID on failure.
-*   INPUT:
-*       Nothing
-*   TIME COMPLEXITY:
-*       O(1)
-*******************************************************************************/
+/*
+DESCRIPTION
+	Creates unique ID of a process. 
+	Creation may fail.
+RETURN
+	UID on successful creation;
+	BadUID on failure;
+INPUT
+	There is no input for this function.  
+TIME COMPLEXITY:
+    O(1)
+*/
 nsrd_uid_t UIDCreate(void);
 
-/*******************************************************************************
-*   DESCRIPTION:
-*       Compares two UIDs.
-*   RETURN:
-*       1 - Equal.
-*       0 - Not equal.
-*   INPUT:
-*       uid1: UID structure to compare.
-*       uid2: UID structure to compare.
-*   TIME COMPLEXITY:
-*       O(1)
-*******************************************************************************/
+/*
+DESCRIPTION
+	Checks if the UIDs are the same. 
+RETURN
+	1: UIDs are the same;
+	0: UIDs are not the same.
+INPUT
+	uid1: UID passed by value;
+	uid1: UID passed by value;
+TIME COMPLEXITY:
+    O(1)
+*/
 int UIDIsSame(nsrd_uid_t uid1, nsrd_uid_t uid2);
 
 

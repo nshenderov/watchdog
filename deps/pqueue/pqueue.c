@@ -2,7 +2,7 @@
 *
 * FILENAME : pqueue.c
 *
-* DESCRIPTION : Implementation of a priority queue data structure.
+* DESCRIPTION : Priority queue implementation.
 * 
 * AUTHOR : Nick Shenderov
 *
@@ -10,8 +10,8 @@
 * 
 *******************************************************************************/
 
-#include <assert.h>
-#include <stdlib.h>
+#include <assert.h> /* assert */
+#include <stdlib.h> /* free, malloc */
 
 #include "pqueue.h"
 

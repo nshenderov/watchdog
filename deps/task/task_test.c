@@ -2,18 +2,19 @@
 *
 * FILENAME : task_test.c
 *
+* DESCRIPTION : Task unit tests.
+* 
 * AUTHOR : Nick Shenderov
 *
 * DATE : 7.05.2023
 * 
 *******************************************************************************/
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
+#include <stdlib.h> /* free */
+#include <unistd.h> /* sleep */
 
-#include "task.h" /* task */
-#include "testing.h" /* TH_ASSERT, TH_TEST_T, TH_TESTS_ARRAY_END, TH_RUN_TESTS*/
+#include "task.h"
+#include "testing.h"
 
 
 #define FREE_MEMORY(ptr) \
@@ -28,40 +29,33 @@ typedef struct op_params
 	int *allocated_mem;
 } op_params_container_t;
 
-/******************************************************************************/
-
 static void TestTaskExecute(void);
 static op_status_t ExecIncr(void *operation_params);
 static op_status_t IncrInt(void *val){*((int *)val) += 1; return(COMPLETE);}
 static void Cleanup(void *cleanup_params){FREE_MEMORY(cleanup_params);}
 
-/******************************************************************************/
 
 static void TestTaskIsSame(void);
-
 static void TestTaskCompare(void);
-
 static void TestTaskGetUID(void);
-
 static void TestTaskGetExecutionTime(void);
-
 static void TestTaskUpdateExecTime(void);
 
 int main()
 {
-   TH_TEST_T TESTS[] = {
-   	{"Test IsSame", TestTaskIsSame},
-		{"Test Compare", TestTaskCompare},
-		{"Test Execute", TestTaskExecute},
-		{"Test UpdateExecTime", TestTaskUpdateExecTime},
-		{"Test GetExecutionTime", TestTaskGetExecutionTime},
-		{"Test GetUID", TestTaskGetUID},
-		TH_TESTS_ARRAY_END
-	};
+    TH_TEST_T TESTS[] = {
+        {"Test IsSame", TestTaskIsSame},
+        {"Compare", TestTaskCompare},
+        {"Execute", TestTaskExecute},
+        {"UpdateExecTime", TestTaskUpdateExecTime},
+        {"GetExecutionTime", TestTaskGetExecutionTime},
+        {"GetUID", TestTaskGetUID},
+        TH_TESTS_ARRAY_END
+    };
 
-	TH_RUN_TESTS(TESTS);
+    TH_RUN_TESTS(TESTS);
 
-	return (0);
+    return (0);
 }
 
 static void TestTaskIsSame(void)
@@ -159,9 +153,9 @@ static void TestTaskGetUID(void)
 	task_t *task = TaskCreate(ExecIncr, Cleanup, &box, NULL, 0);
 	nsrd_uid_t uid = TaskGetUID(task);
 
-	printf("\n    PID: %d \n", uid.pid);
-	printf("    Counter: %ld \n", uid.counter);
-	printf("    Timestamp: %s", ctime(&uid.timestamp));
+	printf("\n  PID: %d \n", uid.pid);
+	printf("  Counter: %ld \n", uid.counter);
+	printf("  Timestamp: %s", ctime(&uid.timestamp));
 
 	TaskDestroy(task);
 }

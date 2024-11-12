@@ -2,7 +2,7 @@
 *
 * FILENAME : task.c
 *
-* DESCRIPTION : Implementation of a task data structure.
+* DESCRIPTION : Task implementation.
 * 
 * AUTHOR : Nick Shenderov
 *

@@ -1,7 +1,7 @@
 /*******************************************************************************
 * FILENAME : dlist.c
 *
-* DESCRIPTION : Implementation of a doubly linked list data structure.
+* DESCRIPTION : Doubly linked list implementation.
 * 
 * AUTHOR : Nick Shenderov
 * 
